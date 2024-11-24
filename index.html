@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Funny Sound Button</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #1a1c2c 0%, #4a1942 100%);
+            font-family: 'Fredoka', sans-serif;
+            overflow: hidden;
+            color: white;
+        }
+        
+        .container {
+            text-align: center;
+            padding: 20px;
+            position: relative;
+        }
+
+        .game-stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 20px 0;
+            font-size: 1.2em;
+        }
+
+        .stat-box {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px 20px;
+            border-radius: 15px;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+        }
+
+        .stat-box:hover {
+            transform: translateY(-2px);
+        }
+
+        h1 {
+            color: white;
+            font-size: 3.5em;
+            font-weight: 600;
+            text-shadow: 0 0 10px rgba(255,255,255,0.3),
+                         0 0 20px rgba(255,255,255,0.2),
+                         0 0 30px rgba(255,255,255,0.1);
+            margin-bottom: 30px;
+            letter-spacing: 2px;
+        }
+        
+        .game-button {
+            padding: 30px 60px;
+            font-size: 28px;
+            font-family: 'Fredoka', sans-serif;
+            font-weight: 600;
+            background: linear-gradient(145deg, #ff6b6b, #ff8e53);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2),
+                       0 0 0 5px rgba(255,255,255,0.1);
+            position: relative;
+            overflow: hidden;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .game-button:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.3),
+                       0 0 0 8px rgba(255,255,255,0.2);
+        }
+        
+        .game-button:active {
+            transform: translateY(2px) scale(0.95);
+            box-shadow: 0 5px 10px rgba(0,0,0,0.2),
+                       0 0 0 3px rgba(255,255,255,0.1);
+        }
+
+        .emoji {
+            font-size: 50px;
+            margin: 20px;
+            animation: float 3s ease-in-out infinite;
+            filter: drop-shadow(0 0 10px rgba(255,255,255,0.3));
+        }
+
+        .poo {
+            position: absolute;
+            font-size: 30px;
+            pointer-events: none;
+            animation: fall 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+            z-index: 1000;
+            filter: drop-shadow(0 0 5px rgba(0,0,0,0.3));
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(0) scale(0.5) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(300px) scale(1) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .game-over {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 4em;
+            font-weight: 600;
+            color: #ff6b6b;
+            text-shadow: 0 0 10px rgba(255,107,107,0.5);
+            animation: pulse 2s infinite;
+            z-index: 1001;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -50%) scale(1.1); }
+        }
+
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: particleFloat 10s infinite linear;
+        }
+
+        @keyframes particleFloat {
+            0% { transform: translateY(0) rotate(0deg); }
+            100% { transform: translateY(-100vh) rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="particles"></div>
+    <div class="container">
+        <h1>The Funny Button</h1>
+        <div class="game-stats">
+            <div class="stat-box">
+                Time: <span id="timeLeft">60</span>s
+            </div>
+            <div class="stat-box">
+                Score: <span id="pushCount">0</span>
+            </div>
+            <div class="stat-box">
+                Best: <span id="highScore">0</span>
+            </div>
+        </div>
+        <div class="emoji">💨</div>
+        <button class="game-button" onclick="playFart()">Push Me!</button>
+        <div id="gameOver" class="game-over">Game Over!</div>
+    </div>
+    
+    <audio id="fartSound" src="https://www.soundjay.com/human/sounds/fart-01.mp3" preload="auto"></audio>
+    
+    <script>
+        let count = 0;
+        let timeLeft = 60;
+        let timer = null;
+        let isGameActive = false;
+        let highScore = localStorage.getItem('highScore') || 0;
+        
+        document.getElementById('highScore').textContent = highScore;
+
+        // Create floating particles
+        function createParticles() {
+            const particles = document.querySelector('.particles');
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + 'vw';
+                particle.style.top = Math.random() * 100 + 'vh';
+                particle.style.width = Math.random() * 3 + 'px';
+                particle.style.height = particle.style.width;
+                particle.style.opacity = Math.random() * 0.5;
+                particle.style.animationDuration = (Math.random() * 5 + 5) + 's';
+                particles.appendChild(particle);
+            }
+        }
+        createParticles();
+
+        function createPoo(x, y) {
+            const poo = document.createElement('div');
+            poo.className = 'poo';
+            poo.textContent = '💩';
+            
+            poo.style.left = x + 'px';
+            poo.style.top = y + 'px';
+            
+            document.body.appendChild(poo);
+            
+            setTimeout(() => {
+                poo.remove();
+            }, 1500);
+        }
+
+        function startGame() {
+            if (!isGameActive) {
+                isGameActive = true;
+                count = 0;
+                timeLeft = 60;
+                document.getElementById('pushCount').textContent = count;
+                document.getElementById('gameOver').style.display = 'none';
+                timer = setInterval(updateTimer, 1000);
+            }
+        }
+
+        function updateTimer() {
+            timeLeft--;
+            document.getElementById('timeLeft').textContent = timeLeft;
+            
+            if (timeLeft <= 0) {
+                endGame();
+            }
+        }
+
+        function endGame() {
+            isGameActive = false;
+            clearInterval(timer);
+            document.getElementById('gameOver').style.display = 'block';
+            
+            if (count > highScore) {
+                highScore = count;
+                localStorage.setItem('highScore', highScore);
+                document.getElementById('highScore').textContent = highScore;
+            }
+        }
+
+        function playFart() {
+            if (!isGameActive) {
+                startGame();
+            }
+            
+            if (timeLeft > 0) {
+                const sound = document.getElementById('fartSound');
+                const button = document.querySelector('.game-button');
+                const rect = button.getBoundingClientRect();
+                
+                const x = rect.left + (rect.width / 2) - 15;
+                const y = rect.top + (rect.height / 2) - 15;
+                
+                sound.currentTime = 0;
+                sound.play();
+                count++;
+                document.getElementById('pushCount').textContent = count;
+                
+                // Create multiple poos in a spread pattern
+                for (let i = 0; i < 3; i++) {
+                    const offsetX = x + (Math.random() * 40 - 20);
+                    setTimeout(() => {
+                        createPoo(offsetX, y);
+                    }, i * 100);
+                }
+
+                // Button press effect
+                button.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    button.style.transform = '';
+                }, 150);
+            }
+        }
+    </script>
+</body>
+</html>
